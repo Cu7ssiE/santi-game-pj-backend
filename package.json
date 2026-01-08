@@ -2,11 +2,11 @@
   "name": "santi-game-pj-backend",
   "version": "1.0.0",
   "description": "\"# santi-game-pj-backend\"",
-  "main": "test.js",
-  
-  "type": "module", 
-
+  "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
