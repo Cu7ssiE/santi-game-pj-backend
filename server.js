@@ -17,13 +17,17 @@ app.use(express.json());
 // 1. สร้าง Pool ที่นี่ (ใช้ค่า Config เดิมของคุณ)
 const pool = createPool({
   host: 'gateway01.ap-southeast-1.prod.aws.tidbcloud.com',
-  PORT:"4000",
+  port: 4000,
   user: '3J3R4CVkCymAtX5.root',
   password: 'XIEOhSrELG3xvkRA',
   database: 'sati_game',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  ssl: {
+        minVersion: 'TLSv1.2',
+        rejectUnauthorized: true
+    }
 });
 
 console.log('✅ Connected to database (via pool)');
