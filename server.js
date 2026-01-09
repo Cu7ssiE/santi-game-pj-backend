@@ -13,6 +13,10 @@ const app = express();
 
 // 🚩 จุดแก้ที่ 1: รับค่า PORT จาก Railway (สำคัญมาก ไม่งั้นโดน Kill)
 const port = process.env.PORT || 4000;
+// ต้องมี '0.0.0.0'
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running on port ${port}`);
+});
 
 app.use(cors());
 app.use(express.json());
