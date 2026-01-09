@@ -1,20 +1,23 @@
 // server.js
+
 import express from 'express';
 import cors from 'cors';
 import { createPool } from 'mysql2';
-import bcrypt from 'bcrypt'; // ต้อง import ถ้ามีการใช้ใน server แต่ปกติใช้ใน route
+import bcrypt from 'bcrypt';
 
-// Import Route ที่เราจะแก้
+// Import Route
 import authRoute from './routes/auth.js';
-import questionRoute from './routes/questions.js'; // สมมติว่ามีไฟล์นี้ด้วย
+import questionRoute from './routes/questions.js';
 
 const app = express();
-const port = 4000; // ใช้ Port 4000 ตามที่คุณเคยตั้ง
+
+// 🚩 จุดแก้ที่ 1: รับค่า PORT จาก Railway (สำคัญมาก ไม่งั้นโดน Kill)
+const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
 
-// 1. สร้าง Pool ที่นี่ (ใช้ค่า Config เดิมของคุณ)
+// สร้าง Pool (แนะนำให้ใช้ process.env เพื่อความปลอดภัยดึงค่าจาก Railway)
 const pool = createPool({
   host: 'gateway01.ap-southeast-1.prod.aws.tidbcloud.com',
   port: process.env.DB_PORT || 4000,
@@ -32,11 +35,11 @@ const pool = createPool({
 
 console.log('✅ Connected to database (via pool)');
 
-// 2. เรียกใช้ Route โดยส่ง pool เข้าไป
-// สังเกตว่า authRoute มันจะเป็นฟังก์ชันรับค่า pool
+// เรียกใช้ Route โดยส่ง pool เข้าไป
 app.use('/', authRoute(pool)); 
 app.use('/questions', questionRoute(pool));
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+// 🚩 จุดแก้ที่ 2: เพิ่ม '0.0.0.0' เพื่อให้ Railway มองเห็น Server เรา
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on port ${port}`);
 });
